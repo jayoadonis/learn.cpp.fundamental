@@ -19,6 +19,7 @@ namespace learn::cpp::fundamental::value_semantic::test::copy_semantic::demo_i {
             PersonTest personTest;
             personTest.testI();
             personTest.testII();
+            personTest.testIII();
         }
 
         private: virtual void testI() const {
@@ -60,6 +61,28 @@ namespace learn::cpp::fundamental::value_semantic::test::copy_semantic::demo_i {
             assert( (firstNameCmpIIIb == 0) && "Copy-assignment-op not working..." );
 
             personIII = personIII;
+        }
+
+        //REM: Test copy-ctor with r-value/temp-value instance.
+        private: void testIII() const {
+
+            using learn::cpp::fundamental::value_semantic::copy_semantic::demo_i::Person;
+
+            Person personI( Person{} );
+
+            int firstNameCmp = std::strcmp(personI.getFirstName(), "N/a");
+
+            assert(
+                (firstNameCmp == 0) && "Copy-ctor not working..."
+            );
+
+            Person personII( Person("Sample First Name") );
+
+            int firstNameCmpI = std::strcmp(personII.getFirstName(), "Sample First Name");
+
+            assert(
+                (firstNameCmpI == 0) && "Copy-ctor not working..."
+            );
         }
     };
 }
