@@ -78,3 +78,19 @@ fun loadEnv( filepath: String = "./.env.dev" ): Map<String, String> {
         it.key.toString() to it.value.toString()
     }.toMap();
 }
+
+
+buildscript {
+
+    repositories {
+
+        gradlePluginPortal();
+        mavenCentral();
+    }
+
+    dependencies {
+        
+        classpath("org.yaml:snakeyaml:2.4");
+    }
+
+}

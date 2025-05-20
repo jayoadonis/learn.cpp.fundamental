@@ -1,3 +1,4 @@
+import org.yaml.snakeyaml.Yaml;
 
 plugins {
 
@@ -48,13 +49,37 @@ project.publishing {
 
         withType<MavenPublication>().configureEach {
             
+            var devsYamlTxt: String?; 
+            try {
+                devsYamlTxt = file(
+                    "${project.rootDir}/gradle/developers.yml"
+                ).readText();
+            }
+            catch( exc: Exception ) {
+                devsYamlTxt = """
+                developers:
+                    - developer:
+                        id: <default>
+                        name: <default>
+                        email: <default>
+                """;
+            }
+
+            val devsYamlRoot = Yaml().load<Map<String, Any>>(devsYamlTxt);
+
+            @Suppress("UNCHECKED_CAST")
+            val devsYaml = devsYamlRoot["developers"] as? List<Map<String, Map<String, String>>>;
+
             pom {
                 developers {
-                    developer {
-                        id.set("jayoadonis");
-                        name.set("Jayo, A.R.B.");
-                        email.set("jayo.adonisraphael@gmail.com");
-                        url.set("www.github.com/jayoadonis/learn.cpp.fundamental");
+                    devsYaml?.forEach { entry ->
+                        val dev = entry["developer"]!!;
+                        developer {
+                            id.set(     dev["id"]       ?: "<default>");
+                            name.set(   dev["name"]     ?: "<default>");
+                            email.set(  dev["email"]    ?: "<default>");
+                            url.set(    dev["url"]      ?: "<default>");
+                        }
                     }
                 }
             }
