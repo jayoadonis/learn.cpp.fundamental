@@ -17,6 +17,8 @@ val OS_FAMILY: String = when {
 }
 
 val learnCPPFundamentalProjectGroupProp: String by project;
+val learnCPPFundamentalStdCPPCompilerArgLinuxProp: String by project;
+val learnCPPFundamentalStdCPPCompilerArgWindowsProp: String by project;
 
 project.version = "0.0.0";
 project.group = learnCPPFundamentalProjectGroupProp;
@@ -73,8 +75,8 @@ project.tasks.withType<CppCompile>().configureEach {
 
     compilerArgs.addAll( toolChain.map { tc ->
         when(tc) {
-            is Gcc, is Clang -> listOf("-std=c++17");
-            is VisualCpp -> listOf("/std:c++17");
+            is Gcc, is Clang -> listOf(learnCPPFundamentalStdCPPCompilerArgLinuxProp);
+            is VisualCpp -> listOf(learnCPPFundamentalStdCPPCompilerArgWindowsProp);
             else -> throw GradleException("Unsupported toolchain: '$tc'.");
         }
     });
