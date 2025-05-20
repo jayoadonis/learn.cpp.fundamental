@@ -16,8 +16,10 @@ val OS_FAMILY: String = when {
     else -> throw GradleException("Unsupported Operating System: '$RAW_OS_FAMILY'.");
 }
 
+val learnCPPFundamentalProjectGroupProp: String by project;
+
 project.version = "0.0.0";
-project.group = "learn.cpp.fundamental";
+project.group = learnCPPFundamentalProjectGroupProp;
 
 project.library {
 
