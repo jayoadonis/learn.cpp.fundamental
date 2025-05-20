@@ -6,6 +6,16 @@ plugins {
     id("maven-publish");
 }
 
+val RAW_OS_FAMILY: String = System.getProperty("os.name")?.toString()
+    ?: throw GradleException("Cannot find props 'os.name'");
+val OS_FAMILY: String = when {
+    RAW_OS_FAMILY.lowercase().contains("win") -> "windows";
+    RAW_OS_FAMILY.lowercase().contains("mac") -> "macos";
+    RAW_OS_FAMILY.lowercase().contains("nux") ||
+        RAW_OS_FAMILY.lowercase().contains("nix") -> "linux";
+    else -> throw GradleException("Unsupported Operating System: '$RAW_OS_FAMILY'.");
+}
+
 project.version = "0.0.0";
 project.group = "learn.cpp.fundamental";
 
