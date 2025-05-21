@@ -5,7 +5,7 @@
 #include "learn/cpp/fundamental/value_semantic/copy_semantic/demo_ii/Person.h"
 
 #include <cassert>
-
+#include <cstring>
 
 
 namespace learn::cpp::fundamental
@@ -20,6 +20,7 @@ namespace learn::cpp::fundamental
 
             PersonTest personTest{};
             personTest.testI();
+            personTest.testII();
         }
 
         private: virtual void testI() const {
@@ -36,6 +37,36 @@ namespace learn::cpp::fundamental
 
             std::cout << "'" << person.getFirstName() << "'" << std::endl;
             
+        }
+
+        
+        private: virtual void testII() const {
+
+            using namespace learn::cpp::fundamental;
+            
+            value_semantic::copy_semantic::demo_ii::Person person;
+
+            int cmpFirstNameI = std::strcmp("N/a", person.getFirstName());
+
+            assert(
+                (cmpFirstNameI == 0) && "First Name does not match."
+            );
+
+            person.setFirstName(std::move(new char[]{'1', '2', ' ', '9', '\0'}));
+
+            int cmpFirstNameII = std::strcmp("12 9", person.getFirstName());
+
+            assert(
+                (cmpFirstNameII == 0) && "First Name does not match."
+            );
+
+            person.setFirstName(nullptr);
+
+            int cmpFirstNameIII = std::strcmp("N/a", person.getFirstName());
+
+            assert(
+                (cmpFirstNameIII == 0) && "First Name does not match."
+            );
         }
     };
 

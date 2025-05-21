@@ -88,6 +88,37 @@ namespace learn::cpp::fundamental
             this->firstName[i] = firstName[i];
     }
 
+    void Person::setFirstName( 
+        char *&& otherFirstName
+    ) {
+
+        if( !otherFirstName || otherFirstName[0] == '\0' ) {
+            delete[] otherFirstName;
+            otherFirstName = strdup("N/a");
+        }
+        
+        if( this->firstName 
+            && std::strcmp(this->firstName, otherFirstName) == 0 
+        ) {
+            delete[] otherFirstName;
+            otherFirstName = nullptr;
+            return;
+        }
+
+        delete[] this->firstName;
+
+        this->firstName = otherFirstName;
+
+        otherFirstName = nullptr;
+    }
+
+    void Person::setFirstName(
+        std::nullptr_t nullPtrT
+    ) {
+
+        this->setFirstName(static_cast<char const *>(nullPtrT));
+    }
+
     void Person::setMiddleName(
         char const * middleName
     ) {
