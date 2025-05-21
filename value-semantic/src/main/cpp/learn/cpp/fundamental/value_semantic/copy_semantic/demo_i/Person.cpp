@@ -2,6 +2,7 @@
 #include "learn/cpp/fundamental/value_semantic/copy_semantic/demo_i/Person.h"
 
 #include <cstring>
+#include <iostream>
 
 namespace learn::cpp::fundamental::value_semantic::copy_semantic::demo_i {
 
@@ -40,7 +41,7 @@ namespace learn::cpp::fundamental::value_semantic::copy_semantic::demo_i {
             this->firstName = nullptr;
         } 
 
-        if( !firstName || (firstName && std::strcmp( firstName, "") == 0) ) {
+        if( !firstName || (std::strcmp( firstName, "\0") == 0) ) {
 
             firstName = "N/a";
         }
