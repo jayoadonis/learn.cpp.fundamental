@@ -33,26 +33,19 @@ namespace learn::cpp::fundamental::value_semantic::copy_semantic::demo_i {
 
     void Person::setFirstName( char const * firstName ) {
 
-        if( this->firstName ) {
+        //REM: [TODO] .|. is_blank_mt( char const * c_str );
+        if( !firstName || firstName[0] == '\0' ) firstName = "N/a";
+        
+        if( this->firstName && std::strcmp(this->firstName, firstName) == 0 ) return;
 
-            if( firstName && std::strcmp( this->firstName, firstName) == 0 ) return;
+        delete[] this->firstName;
 
-            delete[] this->firstName;
-            this->firstName = nullptr;
-        } 
-
-        if( !firstName || (std::strcmp( firstName, "\0") == 0) ) {
-
-            firstName = "N/a";
-        }
-
-        unsigned int len = 0;
-        while(firstName[len]) ++len;
+        std::size_t len = 0;
+        while(firstName[len++]);
         this->firstName = new char[len+1];
-        for(unsigned int i = 0; i <= len; ++i) {
 
+        for(std::size_t i = 0; i <= len; ++i)
             this->firstName[i] = firstName[i];
-        }
     }
 
     char const * Person::getFirstName() const {
