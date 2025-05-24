@@ -22,6 +22,14 @@ namespace learn::cpp::fundamental
         public: static Status const TMD;
         public: static Status const TMO;
 
+        public: char const * const name;
+        public: char const * const symbol;
+        public: unsigned int const ordinal;
+        public: static unsigned int const COUNT; 
+        // #define __YIKES_COUNT 10
+        // public: static std::array<Status const * const, __YIKES_COUNT> const VALUES;
+        public: static Status const * const VALUES[];
+
         private: explicit Status(
             unsigned int const ordinal,
             char const * symbol,
@@ -31,15 +39,30 @@ namespace learn::cpp::fundamental
             name( name )
         { }
 
-        public: char const * const name;
-        public: char const * const symbol;
-        public: unsigned int const ordinal;
-        #define __YIKES_COUNT 10
-        public: static unsigned int const COUNT; 
-        public: static std::array<Status const * const, __YIKES_COUNT> const VALUES;
+        public: bool const operator==( Status otherStatus ) const noexcept {
+
+            return otherStatus.ordinal == this->ordinal;
+        } 
+
+        public: bool const operator!=( Status otherStatus ) const noexcept {
+
+            return otherStatus.ordinal != this->ordinal;
+        }
     };
 
-    unsigned int const Status::COUNT = __YIKES_COUNT;
+    unsigned int const Status::COUNT = 10/*__YIKES_COUNT*/;
+    Status const * const Status::VALUES[COUNT] = {
+        &Status::NA,
+        &Status::UNK,
+        &Status::CRT,
+        &Status::RDY,
+        &Status::WTG,
+        &Status::RUN,
+        &Status::STP,
+        &Status::IDL,
+        &Status::TMD,
+        &Status::TMO,
+    };
 
     Status const Status::NA(0, "N/a", "NOT_APPLICABLE");
     Status const Status::UNK(1, "UNK", "UNKNOWN");
@@ -52,18 +75,18 @@ namespace learn::cpp::fundamental
     Status const Status::TMD(8, "TMD", "TERMINATED");
     Status const Status::TMO(9, "TMO", "TIMEOUT");
 
-    std::array<Status const * const, Status::COUNT> const Status::VALUES = {{
-        &Status::NA,
-        &Status::UNK,
-        &Status::CRT,
-        &Status::RDY,
-        &Status::WTG,
-        &Status::RUN,
-        &Status::STP,
-        &Status::IDL,
-        &Status::TMD,
-        &Status::TMO,
-    }};
+    // std::array<Status const * const, Status::COUNT> const Status::VALUES = {{
+    //     &Status::NA,
+    //     &Status::UNK,
+    //     &Status::CRT,
+    //     &Status::RDY,
+    //     &Status::WTG,
+    //     &Status::RUN,
+    //     &Status::STP,
+    //     &Status::IDL,
+    //     &Status::TMD,
+    //     &Status::TMO,
+    // }};
 }
 
 #endif

@@ -8,6 +8,7 @@
 
 #include "learn/cpp/fundamental/misc/util/alloc_dealloc_log.h"
 
+#include <ios>
 #include <utility>
 #include <cstring>
 #include <string>
@@ -41,5 +42,15 @@ int main(int arg_c, char** arb_v) {
             << y->name
             << std::endl;
     }
+
+    constant::Status z = constant::Status::RUN;
+
+    std::cout << std::boolalpha
+        << (constant::Status::IDL == constant::Status::UNK )
+        << std::endl
+        << (constant::Status::IDL != constant::Status::UNK )
+        << std::endl
+        << z.name << ", " << z.symbol << ", " << z.ordinal
+        << std::endl;
     return 0;
 }
