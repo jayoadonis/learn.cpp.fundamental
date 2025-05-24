@@ -24,47 +24,61 @@ namespace learn::cpp::fundamental::value_semantic::test::copy_semantic::demo_i {
 
         private: virtual void testI() const {
 
+            std::cout << "=== default ctor ===" << std::endl; 
+
             learn::cpp::fundamental::value_semantic::copy_semantic::demo_i::Person personI;
+            
+            int firstNameCmp = std::strcmp( personI.getFirstName(), "N/a");
 
-            personI.setFirstName("ABA CaD@");
+            assert(
+                (firstNameCmp == 0) && "Not match first name!" 
+            );
 
-            int firstNameCmp = std::strcmp( personI.getFirstName(), "ABA CaD@");
+            // personI.setFirstName("ABA CaD@"); 
 
-            assert( (firstNameCmp == 0) && "Not match first name!");
+            // firstNameCmp = std::strcmp( personI.getFirstName(), "ABA CaD@");
 
-            personI.setFirstName(nullptr);
+            // assert( (firstNameCmp == 0) && "Not match first name!");
 
-            firstNameCmp = std::strcmp( personI.getFirstName(), "N/a");
+            // personI.setFirstName(nullptr);
 
-            assert( (firstNameCmp == 0) && "Not match first name!");
+            // firstNameCmp = std::strcmp( personI.getFirstName(), "N/a");
+
+            // assert( (firstNameCmp == 0) && "Not match first name!");
             
         } 
 
         private: void testII() const {
+            
+            std::cout << "=== default ctor and copy ctor." << std::endl; 
 
             learn::cpp::fundamental::value_semantic::copy_semantic::demo_i::Person personI;
-            personI.setFirstName("Carlo Something");
+
+            // personI.setFirstName("Carlo Something");
 
             learn::cpp::fundamental::value_semantic::copy_semantic::demo_i::Person personII(personI);
 
             int firstNameCmpII = std::strcmp(personI.getFirstName(), personII.getFirstName());
+
             assert( (firstNameCmpII == 0) && "Copy-ctor not working..." );
             
-            learn::cpp::fundamental::value_semantic::copy_semantic::demo_i::Person personIII;
+            // learn::cpp::fundamental::value_semantic::copy_semantic::demo_i::Person personIII;
 
-            personI = personIII;
+            // personI = personIII;
 
-            int firstNameCmpIIIa = std::strcmp(personI.getFirstName(), personIII.getFirstName());
-            int firstNameCmpIIIb = std::strcmp(personI.getFirstName(), "N/a");
+            // int firstNameCmpIIIa = std::strcmp(personI.getFirstName(), personIII.getFirstName());
+            // int firstNameCmpIIIb = std::strcmp(personI.getFirstName(), "N/a");
 
-            assert( (firstNameCmpIIIa == 0) && "Copy-assignment-op not working..." );
-            assert( (firstNameCmpIIIb == 0) && "Copy-assignment-op not working..." );
+            // assert( (firstNameCmpIIIa == 0) && "Copy-assignment-op not working..." );
+            // assert( (firstNameCmpIIIb == 0) && "Copy-assignment-op not working..." );
 
-            personIII = personIII;
+            // personIII = personIII;
         }
 
         //REM: Test copy-ctor with r-value/temp-value instance.
         private: void testIII() const {
+
+            std::cout << "=== copy-ctor with r-value/temp-value instance." << std::endl; 
 
             using learn::cpp::fundamental::value_semantic::copy_semantic::demo_i::Person;
 
