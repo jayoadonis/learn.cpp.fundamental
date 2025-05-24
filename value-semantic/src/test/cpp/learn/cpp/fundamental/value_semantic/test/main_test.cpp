@@ -36,6 +36,8 @@ int main(int arg_c, char** arb_v) {
             << "<><><> "
             << y->ordinal 
             << ", "
+            << y->symbol
+            << ", "
             << y->name
             << std::endl;
     }

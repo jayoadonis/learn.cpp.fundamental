@@ -24,12 +24,15 @@ namespace learn::cpp::fundamental
 
         private: explicit Status(
             unsigned int const ordinal,
+            char const * symbol,
             char const * name
         ) : ordinal( ordinal ),
+            symbol( symbol ),
             name( name )
         { }
 
         public: char const * const name;
+        public: char const * const symbol;
         public: unsigned int const ordinal;
         #define __YIKES_COUNT 10
         public: static unsigned int const COUNT; 
@@ -38,16 +41,16 @@ namespace learn::cpp::fundamental
 
     unsigned int const Status::COUNT = __YIKES_COUNT;
 
-    Status const Status::NA(0, "NOT_APPLICABLE");
-    Status const Status::UNK(1, "UNKNOWN");
-    Status const Status::CRT(2, "CREATE");
-    Status const Status::RDY(3, "READY");
-    Status const Status::WTG(4, "WAITING");
-    Status const Status::RUN(5, "RUNNING");
-    Status const Status::STP(6, "STOPPING");
-    Status const Status::IDL(7, "IDLE");
-    Status const Status::TMD(8, "TERMINATED");
-    Status const Status::TMO(9, "TIMEOUT");
+    Status const Status::NA(0, "N/a", "NOT_APPLICABLE");
+    Status const Status::UNK(1, "UNK", "UNKNOWN");
+    Status const Status::CRT(2, "CRT", "CREATE");
+    Status const Status::RDY(3, "RDY", "READY");
+    Status const Status::WTG(4, "WTG", "WAITING");
+    Status const Status::RUN(5, "RUN", "RUNNING");
+    Status const Status::STP(6, "STP", "STOPPING");
+    Status const Status::IDL(7, "IDL", "IDLE");
+    Status const Status::TMD(8, "TMD", "TERMINATED");
+    Status const Status::TMO(9, "TMO", "TIMEOUT");
 
     std::array<Status const * const, Status::COUNT> const Status::VALUES = {{
         &Status::NA,
