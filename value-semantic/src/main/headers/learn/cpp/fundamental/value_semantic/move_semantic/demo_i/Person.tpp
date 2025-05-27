@@ -9,6 +9,7 @@ namespace learn::cpp::fundamental
 ::value_semantic
 ::move_semantic::demo_i {
 
+    //REM: Should be doing deep-copy... Not a shallow-copy
     template<typename T, typename>
     void Person::setFirstName(T ptr) {
 

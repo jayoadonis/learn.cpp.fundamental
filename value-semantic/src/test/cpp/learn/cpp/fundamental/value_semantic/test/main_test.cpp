@@ -3,6 +3,8 @@
 #include "learn/cpp/fundamental/value_semantic/test/copy_semantic/demo_i/PersonTest.h"
 #include "learn/cpp/fundamental/value_semantic/test/copy_semantic/demo_ii/PersonTest.h"
 #include "learn/cpp/fundamental/value_semantic/test/move_semantic/demo_i/PersonTest.h"
+#include "learn/cpp/fundamental/value_semantic/test/move_semantic/demo_ii/PersonTest.h"
+#include "learn/cpp/fundamental/value_semantic/test/move_semantic/demo_iii/PersonDogTest.h"
 
 #include "learn/cpp/fundamental/misc/constant/Status.h"
 
@@ -23,36 +25,52 @@ int main(int arg_c, char** arb_v) {
 
     test::move_semantic::demo_i::PersonTest::run();
 
-    // using namespace learn::cpp::fundamental::misc;
+    test::move_semantic::demo_ii::PersonTest::run();
+
+    test::move_semantic::demo_iii::PersonDogTest::run();
+
+    using namespace learn::cpp::fundamental::misc;
     
-    // std::cout 
-    //     << constant::Status::RUN.name
-    //     << ", "
-    //     << constant::Status::RUN.ordinal
-    //     << std::endl;
+    std::cout 
+        << constant::Status::RUN.name
+        << ", "
+        << constant::Status::RUN.ordinal
+        << std::endl;
 
-    // for( constant::Status const * const y : constant::Status::VALUES ) {
+    for( constant::Status const * const y : constant::Status::VALUES ) {
         
-    //     std::cout 
-    //         << "<><><> "
-    //         << y->ordinal 
-    //         << ", "
-    //         << y->symbol
-    //         << ", "
-    //         << y->name
-    //         << std::endl;
-    // }
+        std::cout 
+            << "<><><> "
+            << y->ordinal 
+            << ", "
+            << y->symbol
+            << ", "
+            << y->name
+            << std::endl;
+    }
 
-    // constant::Status z = constant::Status::RUN;
+    constant::Status run(std::move(constant::Status::RUN));
 
-    // std::cout << std::boolalpha
-    //     << (constant::Status::IDL == constant::Status::UNK )
-    //     << std::endl
-    //     << (constant::Status::IDL != constant::Status::UNK )
-    //     << std::endl
-    //     << z.name << ", " << z.symbol << ", " << z.ordinal
-    //     << std::endl
-    //     // << constant::Status::PAU.name //REM: [FIX]
-    //     << std::endl;
+    std::cout << std::boolalpha
+        << (constant::Status::IDL == constant::Status::UNK )
+        << std::endl
+        << (constant::Status::IDL != constant::Status::UNK )
+        << std::endl
+        << (run != constant::Status::UNK )
+        << std::endl
+        << (run == run )
+        << std::endl
+        << (run == constant::Status::RUN ) 
+        << std::endl
+        << (run >= constant::Status::RUN ) 
+        << std::endl
+        << (run >= constant::Status::UNK ) 
+        << std::endl
+        << (constant::Status::UNK <= run ) 
+        << std::endl
+        << run.name << ", " << run.symbol << ", " << run.ordinal
+        << std::endl
+        // << constant::Status::PAU.name //REM: [FIX]
+        << std::endl;
     return 0;
 }

@@ -39,18 +39,39 @@ namespace learn::cpp::fundamental
             name( name )
         { }
 
-        public: bool const operator==( Status otherStatus ) const noexcept {
+        public: bool const operator==( Status const & otherStatus ) const noexcept {
 
-            return otherStatus.ordinal == this->ordinal;
+            return  this->ordinal == otherStatus.ordinal;
         } 
 
-        public: bool const operator!=( Status otherStatus ) const noexcept {
+        public: bool const operator!=( Status const & otherStatus ) const noexcept {
 
-            return otherStatus.ordinal != this->ordinal;
+            return this->ordinal != otherStatus.ordinal;
+        }
+
+        public: bool const operator< ( Status const & otherStatus ) const noexcept {
+
+            return this->ordinal < otherStatus.ordinal;
+        }
+
+        public: bool const operator> ( Status const & otherStatus ) const noexcept {
+
+            return this->ordinal > otherStatus.ordinal;
+        }
+
+        public: bool const operator<=( Status const & otherStatus ) const noexcept {
+
+            return this->ordinal <= otherStatus.ordinal;
+        }
+        
+        public: bool const operator>=( Status const & otherStatus ) const noexcept {
+
+            return this->ordinal >= otherStatus.ordinal;
         }
     };
 
     unsigned int const Status::COUNT = 10/*__YIKES_COUNT*/;
+
     Status const * const Status::VALUES[COUNT] = {
         &Status::NA,
         &Status::UNK,
