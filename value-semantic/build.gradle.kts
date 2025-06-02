@@ -24,6 +24,14 @@ val learnCPPFundamentalStdCPPCompilerArgWindowsProp: String by project;
 project.version = "0.0.0";
 project.group = learnCPPFundamentalProjectGroupProp;
 
+project.unitTest {
+
+    // binaries.configureEach { 
+
+    // }
+
+}
+
 project.library {
 
     linkage.set(
@@ -41,6 +49,7 @@ project.library {
 
 project.dependencies {
 
+    implementation(project(":log"));
 }
 
 project.publishing {
@@ -105,4 +114,16 @@ project.tasks.withType<CppCompile>().configureEach {
             else -> throw GradleException("Unsupported toolchain: '$tc'.");
         }
     });
+    
+    compilerArgs.add("/D__VALUE_SEMANTIC_NDEBUG");
+    
+    if (name.contains("debug", ignoreCase = true) ||
+        name.contains("test", ignoreCase = true) 
+    ) {
+
+    }
+    else {
+
+        compilerArgs.add("/D__NO_LOG_DEMO_I_NEW_DELETE_LOG");
+    }
 }

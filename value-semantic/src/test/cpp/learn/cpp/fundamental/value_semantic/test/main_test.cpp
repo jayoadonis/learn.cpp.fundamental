@@ -1,76 +1,40 @@
 
-
-#include "learn/cpp/fundamental/value_semantic/test/copy_semantic/demo_i/PersonTest.h"
-#include "learn/cpp/fundamental/value_semantic/test/copy_semantic/demo_ii/PersonTest.h"
-#include "learn/cpp/fundamental/value_semantic/test/move_semantic/demo_i/PersonTest.h"
-#include "learn/cpp/fundamental/value_semantic/test/move_semantic/demo_ii/PersonTest.h"
-#include "learn/cpp/fundamental/value_semantic/test/move_semantic/demo_iii/PersonDogTest.h"
-
-#include "learn/cpp/fundamental/misc/constant/Status.h"
-
-#include "learn/cpp/fundamental/misc/util/alloc_dealloc_log.h"
-
-#include <ios>
-#include <utility>
-#include <cstring>
-#include <string>
 #include <iostream>
-int main(int arg_c, char** arb_v) {
+#include <new>
+#include <cstdio>
 
-    using namespace learn::cpp::fundamental::value_semantic;
+#include "learn/cpp/fundamental/misc/util/alloc_dealloc_log_iii.h"
 
-    test::copy_semantic::demo_i::PersonTest::run();
+#include "learn/cpp/fundamental/log/demo_i/new_delete_log.h"
+ 
+// void * operator new( std::size_t size ) {
 
-    test::copy_semantic::demo_ii::PersonTest::run();
+//     void * ptr = std::malloc( size );
 
-    test::move_semantic::demo_i::PersonTest::run();
+//     if( !ptr ) throw std::bad_alloc(); 
 
-    test::move_semantic::demo_ii::PersonTest::run();
+//     std::printf("<><><> %s, %zu, %p\n", "new", size, ptr );
 
-    test::move_semantic::demo_iii::PersonDogTest::run();
+//     return ptr;
+// }
 
-    using namespace learn::cpp::fundamental::misc;
-    
-    std::cout 
-        << constant::Status::RUN.name
-        << ", "
-        << constant::Status::RUN.ordinal
-        << std::endl;
+// void operator delete( void * ptr ) noexcept {
 
-    for( constant::Status const * const y : constant::Status::VALUES ) {
-        
-        std::cout 
-            << "<><><> "
-            << y->ordinal 
-            << ", "
-            << y->symbol
-            << ", "
-            << y->name
-            << std::endl;
-    }
+//     std::printf("<><><> %s, %p\n", "free", ptr );
 
-    constant::Status run(std::move(constant::Status::RUN));
+//     std::free( ptr );
+// }
 
-    std::cout << std::boolalpha
-        << (constant::Status::IDL == constant::Status::UNK )
-        << std::endl
-        << (constant::Status::IDL != constant::Status::UNK )
-        << std::endl
-        << (run != constant::Status::UNK )
-        << std::endl
-        << (run == run )
-        << std::endl
-        << (run == constant::Status::RUN ) 
-        << std::endl
-        << (run >= constant::Status::RUN ) 
-        << std::endl
-        << (run >= constant::Status::UNK ) 
-        << std::endl
-        << (constant::Status::UNK <= run ) 
-        << std::endl
-        << run.name << ", " << run.symbol << ", " << run.ordinal
-        << std::endl
-        // << constant::Status::PAU.name //REM: [FIX]
-        << std::endl;
+int main(int arg_c, char** arg_v) {
+
+    // std::cout << "what..." << std::endl;
+ 
+    // std::printf("<> what.\n");
+
+    char * c = new char[]{'c','h','\0'};
+
+    delete[] c;
+    c = nullptr;
+
     return 0;
-}
+} 

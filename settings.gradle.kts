@@ -4,6 +4,7 @@ import java.util.Properties;
 settings.rootProject.name = "fundamental";
 
 settings.include("value-semantic");
+settings.include("log");
 
 
 pluginManagement {
