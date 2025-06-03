@@ -5,7 +5,8 @@
 #include <cstring>
 
 namespace learn::cpp::fundamental
-    ::value_semantic::copy_semantic::demo_ii {
+::value_semantic
+::copy_semantic::demo_ii {
 
     Person::Person() : Person(
         "", "", "", 0
@@ -82,7 +83,7 @@ namespace learn::cpp::fundamental
 
         std::size_t len = 0;
         while(firstName[len++]);
-        this->firstName = new char[len+1];
+        this->firstName = new char[len];
 
         for(std::size_t i = 0; i <= len; ++i)
             this->firstName[i] = firstName[i];
@@ -133,7 +134,7 @@ namespace learn::cpp::fundamental
         std::size_t len = 0;
         while(middleName[len++]);
 
-        this->middleName = new char[len+1];
+        this->middleName = new char[len];
 
         for(std::size_t i = 0; i <= len; ++i)
             this->middleName[i] = middleName[i];
@@ -152,7 +153,7 @@ namespace learn::cpp::fundamental
 
         std::size_t len = 0;
         while(lastName[len++]);
-        this->lastName = new char[len+1];
+        this->lastName = new char[len];
 
         for(std::size_t i = 0; i <= len; ++i)
             this->lastName[i] = lastName[i];

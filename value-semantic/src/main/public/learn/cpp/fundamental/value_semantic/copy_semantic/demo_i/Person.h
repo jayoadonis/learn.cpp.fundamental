@@ -2,7 +2,8 @@
 #ifndef __LEARN_CPP_FUNDAMENTAL_VALUE_SEMANTIC_COPY_SEMANTIC_DEMO_I_PERSON_H
 #define __LEARN_CPP_FUNDAMENTAL_VALUE_SEMANTIC_COPY_SEMANTIC_DEMO_I_PERSON_H
 
-
+#include <cstring>
+#include <cstddef>
 namespace learn::cpp::fundamental::value_semantic::copy_semantic::demo_i {
 
     struct Person {

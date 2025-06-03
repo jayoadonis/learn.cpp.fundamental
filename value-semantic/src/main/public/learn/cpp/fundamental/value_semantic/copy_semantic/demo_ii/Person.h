@@ -4,7 +4,8 @@
 
 #include <cstddef>
 namespace learn::cpp::fundamental
-    ::value_semantic::copy_semantic::demo_ii {
+::value_semantic
+::copy_semantic::demo_ii {
 
     struct Person {
 

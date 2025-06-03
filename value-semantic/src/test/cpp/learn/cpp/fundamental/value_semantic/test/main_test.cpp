@@ -9,6 +9,10 @@
 #include "learn/cpp/fundamental/log/demo_iv/new_delete_log.h" 
 
 
+#include "learn/cpp/fundamental/value_semantic/test/copy_semantic/demo_ii/PersonTest.h"
+
+using namespace learn::cpp::fundamental::value_semantic;
+
 int main(int arg_c, char** arg_v) {
 
     // std::cout << "::: BEGIN." << ((void*)static_cast<int(*)(int,char**)>(main)) << std::endl;
@@ -30,6 +34,8 @@ int main(int arg_c, char** arg_v) {
 
     delete i;
     i = nullptr;
+
+    test::copy_semantic::demo_ii::PersonTest::run();
 
     // std::cout << "::: END (main)." << ((void*)main) << std::endl;
 

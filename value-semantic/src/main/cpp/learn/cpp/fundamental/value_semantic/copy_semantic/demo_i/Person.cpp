@@ -1,9 +1,6 @@
 
 #include "learn/cpp/fundamental/value_semantic/copy_semantic/demo_i/Person.h"
 
-#include <cstring>
-#include <iostream>
-
 namespace learn::cpp::fundamental::value_semantic::copy_semantic::demo_i {
 
     Person::Person() : Person("") {}
@@ -42,7 +39,7 @@ namespace learn::cpp::fundamental::value_semantic::copy_semantic::demo_i {
 
         std::size_t len = 0;
         while(firstName[len++]);
-        this->firstName = new char[len+1];
+        this->firstName = new char[len];
 
         for(std::size_t i = 0; i <= len; ++i)
             this->firstName[i] = firstName[i];
@@ -50,6 +47,6 @@ namespace learn::cpp::fundamental::value_semantic::copy_semantic::demo_i {
 
     char const * Person::getFirstName() const {
 
-        return this->firstName ? this->firstName : "";
+        return this->firstName;
     }
 }

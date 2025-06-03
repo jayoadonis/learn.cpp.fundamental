@@ -6,10 +6,13 @@
 
 #include <cassert>
 #include <cstring>
+#include <cstdio>
 
+#include <typeinfo>
 
 namespace learn::cpp::fundamental
-    ::value_semantic::test::copy_semantic::demo_ii {
+::value_semantic
+::test::copy_semantic::demo_ii {
     
     struct PersonTest {
 
@@ -19,28 +22,41 @@ namespace learn::cpp::fundamental
         public: static void run() {
 
             PersonTest personTest{};
+
+            std::printf( "::: BEGIN: %s, %p\n", typeid(personTest).name(), static_cast<void*>(&personTest) );
             personTest.testI();
             personTest.testII();
+            std::printf( "::: END: %s, %p\n", typeid(personTest).name(), static_cast<void*>(&personTest) );
+
         }
 
         private: virtual void testI() const {
 
-            learn::cpp::fundamental::value_semantic::copy_semantic::demo_ii::Person person;
+            std::printf( ":: BEGIN: testI(V)V, %p\n", this ); 
 
-            std::cout << "'" << person.getFirstName() << "'" << std::endl;
+            using namespace learn::cpp::fundamental::value_semantic;
+            
+            value_semantic::copy_semantic::demo_ii::Person person;
+
+            std::cout << "1. '" << person.getFirstName() << "'" << std::endl;
 
             person.setFirstName("Micky Dat");
 
-            std::cout << "'" << person.getFirstName() << "'" << std::endl;
+            std::cout << "2. '" << person.getFirstName() << "'" << std::endl;
 
             person.setFirstName(nullptr);
 
-            std::cout << "'" << person.getFirstName() << "'" << std::endl;
+            std::cout << "3. '" << person.getFirstName() << "'" << std::endl;
+
+            std::printf( ":: END: testI(V)V, %p\n", this ); 
             
         }
 
         
         private: virtual void testII() const {
+
+
+            std::printf( ":: BEGIN: testII(V)V, %p\n", this ); 
 
             using namespace learn::cpp::fundamental;
             
@@ -67,6 +83,8 @@ namespace learn::cpp::fundamental
             assert(
                 (cmpFirstNameIII == 0) && "First Name does not match."
             );
+
+            std::printf( ":: END: testII(V)V, %p\n", this ); 
         }
     };
 
