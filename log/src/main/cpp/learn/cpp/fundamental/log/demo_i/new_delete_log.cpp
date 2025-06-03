@@ -1,24 +1,25 @@
-
+//REM: [TRICKERY]
 #ifndef __NO_LOG_DEMO_I_NEW_DELETE_LOG
 
-#include "learn/cpp/fundamental/log/demo_i/new_delete_log.h"
 
-void * operator new( std::size_t size ) {
+// #include "learn/cpp/fundamental/log/demo_i/new_delete_log.h"
 
-    void * ptr = std::malloc( size );
+// void * operator new( std::size_t size ) {
 
-    if( !ptr ) throw std::bad_alloc();
+//     void * ptr = std::malloc( size );
 
-    std::printf( "(%-10s) [%-8zu]@0x%p\n", "new", size, ptr );
+//     if( !ptr ) throw std::bad_alloc();
 
-    return ptr;
-}
+//     std::printf( "aaa(%-10s) [%-8zu]@0x%p\n", "new", size, ptr );
 
-void operator delete( void * ptr ) noexcept {
+//     return ptr;
+// }
 
-    std::printf( "(%-10s) [%-8s]@0x%p\n", "delete", " ", ptr );
+// void operator delete( void * ptr ) noexcept {
 
-    std::free( ptr );
-}
+//     std::printf( "zzz(%-10s) [%-8s]@0x%p\n", "delete", " ", ptr );
+
+//     std::free( ptr );
+// }
 
 #endif

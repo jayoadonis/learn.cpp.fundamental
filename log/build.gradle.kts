@@ -29,6 +29,14 @@ project.unitTest {
 
 project.publishing {
 
+    repositories {
+
+        maven {
+
+            name = "local"
+            url = uri( "${project.rootDir}/.local_repo" );
+        }
+    }
 }
 
 project.tasks.withType<CppCompile>().configureEach {

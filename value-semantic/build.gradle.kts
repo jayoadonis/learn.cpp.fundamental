@@ -49,7 +49,12 @@ project.library {
 
 project.dependencies {
 
-    implementation(project(":log"));
+    // implementation(project(":log"));
+    // implementation( "learn.cpp.fundamental:log:0.0.0" );
+    // implementation( "learn.cpp.fundamental:log:0.0.0:cpp-api-headers@zip" );
+    // implementation( "learn.cpp.fundamental:log_release_windows:0.0.0@dll" );
+
+    testImplementation( "learn.cpp.fundamental:log:0.0.0" );
 }
 
 project.publishing {
@@ -59,6 +64,7 @@ project.publishing {
         withType<MavenPublication>().configureEach {
             
             var devsYamlTxt: String?; 
+
             try {
                 devsYamlTxt = file(
                     "${project.rootDir}/gradle/developers.yml"
@@ -100,7 +106,7 @@ project.publishing {
         maven {
 
             name = "local";
-            url = uri("./.local_repo");
+            url = uri("${project.rootDir}/.local_repo");
         }
     }
 }
@@ -117,13 +123,13 @@ project.tasks.withType<CppCompile>().configureEach {
     
     compilerArgs.add("/D__VALUE_SEMANTIC_NDEBUG");
     
-    if (name.contains("debug", ignoreCase = true) ||
+    if( name.contains("debug", ignoreCase = true) ||
         name.contains("test", ignoreCase = true) 
     ) {
 
     }
     else {
-
+        
         compilerArgs.add("/D__NO_LOG_DEMO_I_NEW_DELETE_LOG");
     }
 }
