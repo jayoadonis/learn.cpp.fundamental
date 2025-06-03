@@ -16,7 +16,7 @@ namespace learn::cpp::fundamental
             char const * lastName,
             int age
         );
-        public: explicit Person(
+        public: Person(
             Person const & otherPerson
         );
         public: virtual ~Person();

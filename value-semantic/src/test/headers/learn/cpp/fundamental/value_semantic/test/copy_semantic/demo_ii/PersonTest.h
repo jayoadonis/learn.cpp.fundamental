@@ -26,6 +26,7 @@ namespace learn::cpp::fundamental
             std::printf( "::: BEGIN: %s, %p\n", typeid(personTest).name(), static_cast<void*>(&personTest) );
             personTest.testI();
             personTest.testII();
+            personTest.testIII();
             std::printf( "::: END: %s, %p\n", typeid(personTest).name(), static_cast<void*>(&personTest) );
 
         }
@@ -85,6 +86,20 @@ namespace learn::cpp::fundamental
             );
 
             std::printf( ":: END: testII(V)V, %p\n", this ); 
+        }
+
+        private: void testIII() const {
+
+            std::printf( ":: BEGIN: testIII(V)V, copy-cotr, %p\n", this );
+            
+            using namespace learn::cpp::fundamental::value_semantic;
+
+            value_semantic::copy_semantic::demo_ii::Person personOne;
+            value_semantic::copy_semantic::demo_ii::Person personTwo( personOne );
+            // value_semantic::copy_semantic::demo_ii::Person personThree = personTwo;
+            
+            std::printf( ":: END: testIII(V)V, copy-cotr, %p\n", this );
+
         }
     };
 
