@@ -24,6 +24,8 @@ project.library {
 }
 
 project.unitTest {
+    
+    baseName.set("${project.name}_test");
 
 }
 
@@ -60,12 +62,22 @@ project.tasks.withType<CppCompile>().configureEach {
     }
     else {
 
-        compilerArgs.add(
+        compilerArgs.addAll(
             toolChain.map { tc -> 
                 when( tc ) {
-                    is Gcc, is Clang -> "-D__NO_LOG_DEMO_I_NEW_DELETE_LOG";
-                    is VisualCpp -> "/D__NO_LOG_DEMO_I_NEW_DELETE_LOG";
-                    else -> "";
+                    is Gcc, is Clang -> listOf(
+                        "-D__NO_LOG_DEMO_I_NEW_DELETE_LOG",
+                        "-D__NO_LOG_DEMO_II_NEW_DELETE_LOG",
+                        "-D__NO_LOG_DEMO_III_NEW_DELETE_LOG",
+                        "-D__NO_LOG_DEMO_IV_NEW_DELETE_LOG"
+                    );
+                    is VisualCpp -> listOf(
+                        "/D__NO_LOG_DEMO_I_NEW_DELETE_LOG",
+                        "/D__NO_LOG_DEMO_II_NEW_DELETE_LOG",
+                        "/D__NO_LOG_DEMO_III_NEW_DELETE_LOG",
+                        "/D__NO_LOG_DEMO_IV_NEW_DELETE_LOG"
+                    );
+                    else -> listOf("");
                 }
             }
         )

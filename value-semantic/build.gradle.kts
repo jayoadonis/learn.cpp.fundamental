@@ -49,12 +49,11 @@ project.library {
 
 project.dependencies {
 
-    // implementation(project(":log"));
-    // implementation( "learn.cpp.fundamental:log:0.0.0" );
-    // implementation( "learn.cpp.fundamental:log:0.0.0:cpp-api-headers@zip" );
-    // implementation( "learn.cpp.fundamental:log_release_windows:0.0.0@dll" );
+    // testImplementation( "learn.cpp.fundamental:log:0.0.0:cpp-api-headers@zip" );
+    // testImplementation( "learn.cpp.fundamental:log_release_windows:0.0.0@dll" );
 
-    testImplementation( "learn.cpp.fundamental:log:0.0.0" );
+    testImplementation(project(":log"));
+    // testImplementation( "learn.cpp.fundamental:log:0.0.0" );
 }
 
 project.publishing {
@@ -121,8 +120,14 @@ project.tasks.withType<CppCompile>().configureEach {
         }
     });
     
-    compilerArgs.add("/D__VALUE_SEMANTIC_NDEBUG");
-    
+    compilerArgs.add( toolChain.map { tc ->
+        when( tc ) {
+            is Gcc, is Clang -> "-D__VALUE_SEMANTIC_NDEBUG"
+            is VisualCpp -> "/D__VALUE_SEMANTIC_NDEBUG"
+            else -> ""
+        }
+    });
+
     if( name.contains("debug", ignoreCase = true) ||
         name.contains("test", ignoreCase = true) 
     ) {
@@ -130,6 +135,13 @@ project.tasks.withType<CppCompile>().configureEach {
     }
     else {
         
-        compilerArgs.add("/D__NO_LOG_DEMO_I_NEW_DELETE_LOG");
+        compilerArgs.add( toolChain.map { tc ->
+            when( tc ) {
+                is Gcc, is Clang -> "-D__NO_LOG_DEMO_I_NEW_DELETE_LOG"
+                is VisualCpp -> "/D__NO_LOG_DEMO_I_NEW_DELETE_LOG"
+                else -> ""
+            }
+        });
     }
+
 }
