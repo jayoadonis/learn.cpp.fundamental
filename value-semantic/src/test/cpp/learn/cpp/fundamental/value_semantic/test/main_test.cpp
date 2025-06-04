@@ -8,6 +8,8 @@
 #include "learn/cpp/fundamental/log/demo_iii/new_delete_log.h" 
 #include "learn/cpp/fundamental/log/demo_iv/new_delete_log.h" 
 
+#include "learn/cpp/fundamental/log/demo_iii/macro_log.h"
+
 
 #include "learn/cpp/fundamental/value_semantic/test/copy_semantic/demo_ii/PersonTest.h"
 
@@ -37,6 +39,7 @@ int main(int arg_c, char** arg_v) {
 
     test::copy_semantic::demo_ii::PersonTest::run();
 
+    __DEMO_III_MACRO_LOG_PRINTLN( "taggie", "messagie" );
 
     // std::cout << "::: END (main)." << ((void*)main) << std::endl;
 

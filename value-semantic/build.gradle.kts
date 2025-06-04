@@ -141,13 +141,15 @@ project.tasks.withType<CppCompile>().configureEach {
                     "-D__NO_LOG_DEMO_I_NEW_DELETE_LOG",
                     "-D__NO_LOG_DEMO_II_NEW_DELETE_LOG",
                     "-D__NO_LOG_DEMO_III_NEW_DELETE_LOG",
-                    "-D__NO_LOG_DEMO_IV_NEW_DELETE_LOG"
+                    "-D__NO_LOG_DEMO_IV_NEW_DELETE_LOG",
+                    "-D__NO_DEMO_MACRO_LOG"
                 );
                 is VisualCpp -> listOf(
                     "/D__NO_LOG_DEMO_I_NEW_DELETE_LOG",
                     "/D__NO_LOG_DEMO_II_NEW_DELETE_LOG",
                     "/D__NO_LOG_DEMO_III_NEW_DELETE_LOG",
-                    "/D__NO_LOG_DEMO_IV_NEW_DELETE_LOG"
+                    "/D__NO_LOG_DEMO_IV_NEW_DELETE_LOG",
+                    "/D__NO_DEMO_MACRO_LOG"
                 );
                 else -> listOf("");
             }

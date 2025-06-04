@@ -194,8 +194,8 @@ inline constexpr const char* BUILD_TIME_12_CSTR = BUILD_TIME_12_ARRAY.data();
     __CPP_FUNC_SIG
 
 inline thread_local static char _cpp_loc_buf[1024];
-inline static char const * _format_i = "[%-15s] [%-15s] [%13s %12s]: %s, %s; [%s:%d] %s\n";
-inline static char const * _format_ii = "[%-15s] [%-15s] [%13s %12s] [%s:%d] %s";
+inline static char const * _format_i = "[%-15s] [%-15s] [%-13s %12s]: %s, %s; [%s:%d] %s\n";
+inline static char const * _format_ii = "[%-15s] [%-15s] [%-13s %12s] [%s:%d] %s";
 
 #define __CPP_LOCATION_FULL_II \
     (                                           \
