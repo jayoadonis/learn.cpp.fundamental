@@ -1,5 +1,5 @@
 
-#ifndef __NO_DEMO_MACRO_LOG
+
 
 #ifndef __LEARN_CPP_FUNDAMENTAL_LOG_DEMO_III_MACRO_LOG_H
 #define __LEARN_CPP_FUNDAMENTAL_LOG_DEMO_III_MACRO_LOG_H
@@ -190,45 +190,49 @@ inline constexpr char const * const  BUILD_TIME_12_CSTR = BUILD_TIME_12_ARRAY.da
   #define __CPP_COMPILER  "UnknownCompiler"
 #endif
 
-//REM: c-string way of more info
-#define __CPP_LOCATION_FULL \
-    "[" __CPP_PLATFORM "] " \
-    "[" __CPP_COMPILER "] " \
-    "[" __CPP_BUILDSTAMP "] " \
-    "[" __CPP_FILE ":" __CPP_STRINGIFY(__CPP_LINE) "] " \
-    __CPP_FUNC_SIG
+#ifndef __NO_DEMO_MACRO_LOG
+  //REM: c-string way of more info
+  #define __CPP_LOCATION_FULL \
+      "[" __CPP_PLATFORM "] " \
+      "[" __CPP_COMPILER "] " \
+      "[" __CPP_BUILDSTAMP "] " \
+      "[" __CPP_FILE ":" __CPP_STRINGIFY(__CPP_LINE) "] " \
+      __CPP_FUNC_SIG
 
-inline thread_local static char _cpp_loc_buf[1024];
-inline static char const * _format_i = "[%-15s] [%-15s] [%-13s %12s]: %s, %s; [%s:%d] %s\n";
-inline static char const * _format_ii = "[%-15s] [%-15s] [%-13s %12s] [%s:%d] %s";
+  inline thread_local static char _cpp_loc_buf[1024];
+  inline static char const * _format_i = "[%-15s] [%-15s] [%-13s %12s]: %s, %s; [%s:%d] %s\n";
+  inline static char const * _format_ii = "[%-15s] [%-15s] [%-13s %12s] [%s:%d] %s";
 
-#define __CPP_LOCATION_FULL_II \
-    (                                           \
-        std::snprintf(                          \
-            _cpp_loc_buf, sizeof(_cpp_loc_buf), \
-            _format_ii,                         \
-            __CPP_PLATFORM,                     \
-            __CPP_COMPILER,                     \
-            __CPP_BUILD_DATE, __CPP_BUILD_TIMESTAMP_12,   \
-            __CPP_FILE,                         \
-            __CPP_LINE,                         \
-            __CPP_FUNC_SIG                      \
-        ),                                      \
-        _cpp_loc_buf                            \
-    )
+  #define __CPP_LOCATION_FULL_II \
+      (                                           \
+          std::snprintf(                          \
+              _cpp_loc_buf, sizeof(_cpp_loc_buf), \
+              _format_ii,                         \
+              __CPP_PLATFORM,                     \
+              __CPP_COMPILER,                     \
+              __CPP_BUILD_DATE, __CPP_BUILD_TIMESTAMP_12,   \
+              __CPP_FILE,                         \
+              __CPP_LINE,                         \
+              __CPP_FUNC_SIG                      \
+          ),                                      \
+          _cpp_loc_buf                            \
+      )
 
-//REM: print linefeed of more info
-#define __DEMO_III_MACRO_LOG_PRINTLN(tag, msg)      \
-    std::printf(                                    \
-        _format_i,                                   \
-        __CPP_PLATFORM,                             \
-        __CPP_COMPILER,                             \
-        __CPP_BUILD_DATE, __CPP_BUILD_TIMESTAMP_12,                           \
-        tag, msg,                                   \
-        __CPP_FILE, __CPP_LINE,                     \
-        __CPP_FUNC_SIG                              \
-    )
+  //REM: print linefeed of more info
+  #define __DEMO_III_MACRO_LOG_PRINTLN(tag, msg)      \
+      std::printf(                                    \
+          _format_i,                                   \
+          __CPP_PLATFORM,                             \
+          __CPP_COMPILER,                             \
+          __CPP_BUILD_DATE, __CPP_BUILD_TIMESTAMP_12,                           \
+          tag, msg,                                   \
+          __CPP_FILE, __CPP_LINE,                     \
+          __CPP_FUNC_SIG                              \
+      )
+#else
+  #define __CPP_LOCATION_FULL ""
+  #define __CPP_LOCATION_FULL_II ""
+  #define __DEMO_III_MACRO_LOG_PRINTLN(tag, msg)
+#endif //REM: __NO_DEMO_MACRO_LOG
 
 #endif
-
-#endif //REM: __NO_DEMO_MACRO_LOG

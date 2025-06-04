@@ -9,11 +9,12 @@
 #include "learn/cpp/fundamental/log/demo_ii/macro_log.h"
 #include "learn/cpp/fundamental/log/demo_iii/macro_log.h"
 
+#include "learn/cpp/fundamental/log/test/demo_iv/MacroLogTest.h" 
+
 #include <cstdio>
 #include <new>
 
 struct StructI {
-
 
     public: int memFunc(char**) {
         
@@ -61,6 +62,8 @@ int main( int arg_c, char** arg_v ) {
     __LCFLDIIM_LOG_MEM_FUNC_SIG( StructI, memFunc, int (StructI::*)(char**), ">>> Hi there:" );
     __LCFLDIIM_LOG_MEM_FUNC_SIG( StructI, memFunc, int (StructI::*)(char**), ">>> Hi there:" );
     __LCFLDIIM_LOG_MEM_FUNC_SIG( StructI, memFunc, int (StructI::*)(char**), ">>> Hi there:" );
+    
+    __LCFLDIIM_LOG_FUNC_SIG( func_one, void (*)(void), ">>> func_one:" );
 
     StructI s;
     char* dummyArg[] = { nullptr };
@@ -69,6 +72,10 @@ int main( int arg_c, char** arg_v ) {
     __DEMO_III_MACRO_LOG_PRINTLN(
         "Tagz", "MsgZ"
     );
+
+    using namespace learn::cpp::fundamental::log;
+
+    test::demo_iv::MacroLogTest::run();
 
     return 0;
 }
