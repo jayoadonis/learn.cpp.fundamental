@@ -1,8 +1,95 @@
 
+#ifndef __NO_DEMO_MACRO_LOG
+
 #ifndef __LEARN_CPP_FUNDAMENTAL_LOG_DEMO_III_MACRO_LOG_H
 #define __LEARN_CPP_FUNDAMENTAL_LOG_DEMO_III_MACRO_LOG_H
 
 #include <cstdio>
+#include <cstdint>
+#include <array>
+
+// -----------------------------------------------------------------------------
+// 1) Small helper to convert a digit‐character ('0'..'9') → integer 0..9,
+//    or return an “error” marker (-0x80) if it’s not in that range.
+//
+//    We return int8_t since the result will always fit (0..9 or error).
+constexpr std::int8_t char_to_dec(char ch_digit) {
+    return (ch_digit >= '0' && ch_digit <= '9')
+           ? static_cast<std::int8_t>(ch_digit - '0')
+           : static_cast<std::int8_t>(-0x80);
+}
+
+// -----------------------------------------------------------------------------
+// 2) Simple struct to hold hours/minutes/seconds as ints.
+struct HrMinSec {
+    int h, m, s;
+};
+
+// -----------------------------------------------------------------------------
+// 3) Parse a literal "HH:MM:SS" into an HrMinSec.
+//    We assume `t` is exactly 8 characters + '\0'. E.g. "14:23:07".
+constexpr HrMinSec parse_time(char const t[9]) {
+    return HrMinSec {
+        // char_to_dec(t[0]) and t[1] each yield 0..9, so 10*something + something → 0..23
+        char_to_dec(t[0]) * 10 + char_to_dec(t[1]),
+        char_to_dec(t[3]) * 10 + char_to_dec(t[4]),
+        char_to_dec(t[6]) * 10 + char_to_dec(t[7])
+    };
+}
+
+// -----------------------------------------------------------------------------
+// 4) Build a 12‐hour “hh:mm:ss AM/PM” string (length = 11, plus '\0' = 12):
+//
+//    This is constexpr, so it all happens at compile‐time. We return a
+//    std::array<char, 12> containing, for example, "02:23:07 PM\0".
+constexpr std::array<char, 12> make_build_time_12() {
+    // __TIME__ is a compile‐time literal "HH:MM:SS"
+    constexpr char const_time[] = __TIME__; // e.g. "14:23:07"
+
+    constexpr HrMinSec t  = parse_time(const_time);
+    constexpr bool    is_pm = (t.h >= 12);
+    constexpr int     raw_h = t.h % 12;
+    constexpr int     h12   = (raw_h == 0 ? 12 : raw_h);
+
+    std::array<char, 12> out = {};
+
+    // Fill in "hh"
+    out[0] = static_cast<char>('0' + (h12 / 10));
+    out[1] = static_cast<char>('0' + (h12 % 10));
+    out[2] = ':';
+
+    // Fill in "mm"
+    out[3] = static_cast<char>('0' + (t.m / 10));
+    out[4] = static_cast<char>('0' + (t.m % 10));
+    out[5] = ':';
+
+    // Fill in "ss"
+    out[6] = static_cast<char>('0' + (t.s / 10));
+    out[7] = static_cast<char>('0' + (t.s % 10));
+    out[8] = ' ';
+
+    // Fill in "AM" or "PM"
+    out[9]  = (is_pm ? 'P' : 'A');
+    out[10] = 'M';
+
+    // Null‐terminate
+    out[11] = '\0';
+
+    return out;
+}
+
+// -----------------------------------------------------------------------------
+// 5) Store the 12‐hour array in a named constexpr. This ensures it’s not a
+//    temporary, so its .data() pointer remains valid at runtime.
+inline constexpr std::array<char, 12> BUILD_TIME_12_ARRAY = make_build_time_12();
+
+// Now expose a `const char*` to that array’s data:
+inline constexpr const char* BUILD_TIME_12_CSTR = BUILD_TIME_12_ARRAY.data();
+
+// -----------------------------------------------------------------------------
+// 6) Example macro that uses BUILD_TIME_12_CSTR. In your code, you can write
+//    printf("%s\n", BUILD_TIME_12_CSTR); or std::cout << BUILD_TIME_12_CSTR << "\n";
+#define __CPP_TIMESTAMP_12 BUILD_TIME_12_CSTR
 
 //REM: Detect operating system:
 #if defined(_WIN32) || defined(_WIN64)
@@ -75,10 +162,10 @@
 #endif
 
 //REM: Convert decimal/int to string (Stringifying)
-#define ___CPP_STRINGIFY_IMPL(x)  #x
-#define ___CPP_STRINGIFY(x)       ___CPP_STRINGIFY_IMPL(x)
+#define __CPP_STRINGIFY_IMPL(x)  #x
+#define __CPP_STRINGIFY(x)       __CPP_STRINGIFY_IMPL(x)
 
-#define __CPP_LOCATION_STRING  __CPP_FILE ":" ___CPP_STRINGIFY(__CPP_LINE) ": " __CPP_FUNC_SIG
+#define __CPP_LOCATION_STRING  __CPP_FILE ":" __CPP_STRINGIFY(__CPP_LINE) ": " __CPP_FUNC_SIG
 
 //REM: Build date and time (these are standard macros in all C/C++ compilers):
 #define __CPP_BUILD_DATE   __DATE__     //REM: ex: "MM  DD YYYY"
@@ -89,11 +176,11 @@
 
 // If you want to include the host OS or compiler version, you can do things like:
 #if defined(_MSC_VER)
-  #define __CPP_COMPILER  "MSVC " ___CPP_STRINGIFY(_MSC_VER)
+  #define __CPP_COMPILER  "MSVC " __CPP_STRINGIFY(_MSC_VER)
 #elif defined(__clang__)
   #define __CPP_COMPILER  "Clang " __clang_version__
 #elif defined(__GNUC__)
-  #define __CPP_COMPILER  "GCC " ___CPP_STRINGIFY(__GNUC__) "." ___CPP_STRINGIFY(__GNUC_MINOR__)
+  #define __CPP_COMPILER  "GCC " __CPP_STRINGIFY(__GNUC__) "." __CPP_STRINGIFY(__GNUC_MINOR__)
 #else
   #define __CPP_COMPILER  "UnknownCompiler"
 #endif
@@ -103,21 +190,21 @@
     "[" __CPP_PLATFORM "] " \
     "[" __CPP_COMPILER "] " \
     "[" __CPP_BUILDSTAMP "] " \
-    "[" __CPP_FILE ":" ___CPP_STRINGIFY(__CPP_LINE) "] " \
+    "[" __CPP_FILE ":" __CPP_STRINGIFY(__CPP_LINE) "] " \
     __CPP_FUNC_SIG
 
 inline thread_local static char _cpp_loc_buf[1024];
-inline static char const * format_i = "[%-15s] [%-15s] [%-25s]: %s, %s; [%s:%d] %s\n";
-inline static char const * format_ii = "[%-15s] [%-15s] [%-25s] [%s:%d] %s";
+inline static char const * _format_i = "[%-15s] [%-15s] [%13s %12s]: %s, %s; [%s:%d] %s\n";
+inline static char const * _format_ii = "[%-15s] [%-15s] [%13s %12s] [%s:%d] %s";
 
 #define __CPP_LOCATION_FULL_II \
     (                                           \
         std::snprintf(                          \
             _cpp_loc_buf, sizeof(_cpp_loc_buf), \
-            format_ii,                          \
+            _format_ii,                         \
             __CPP_PLATFORM,                     \
             __CPP_COMPILER,                     \
-            __CPP_BUILDSTAMP,                   \
+            __CPP_BUILD_DATE, __CPP_TIMESTAMP_12,   \
             __CPP_FILE,                         \
             __CPP_LINE,                         \
             __CPP_FUNC_SIG                      \
@@ -128,13 +215,15 @@ inline static char const * format_ii = "[%-15s] [%-15s] [%-25s] [%s:%d] %s";
 //REM: print linefeed of more info
 #define __DEMO_III_MACRO_LOG_PRINTLN(tag, msg)      \
     std::printf(                                    \
-        format_i,                                   \
+        _format_i,                                   \
         __CPP_PLATFORM,                             \
         __CPP_COMPILER,                             \
-        __CPP_BUILDSTAMP,                           \
+        __CPP_BUILD_DATE, __CPP_TIMESTAMP_12,                           \
         tag, msg,                                   \
         __CPP_FILE, __CPP_LINE,                     \
         __CPP_FUNC_SIG                              \
     )
 
 #endif
+
+#endif //REM: __NO_DEMO_MACRO_LOG
