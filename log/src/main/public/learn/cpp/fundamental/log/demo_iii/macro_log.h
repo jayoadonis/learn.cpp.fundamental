@@ -8,43 +8,50 @@
 #include <cstdint>
 #include <array>
 
-// -----------------------------------------------------------------------------
-// 1) Small helper to convert a digit‐character ('0'..'9') → integer 0..9,
-//    or return an “error” marker (-0x80) if it’s not in that range.
-//
-//    We return int8_t since the result will always fit (0..9 or error).
+/**
+ * @brief Small helper to convert a digit‐character ('0'..'9') → integer 0..9,
+ * or return an “error” marker (-0x80) if it’s not in that range.
+ * 
+ * @param ch_digit 
+ * @return constexpr std::int8_t 
+ */
 constexpr std::int8_t char_to_dec(char ch_digit) {
     return (ch_digit >= '0' && ch_digit <= '9')
            ? static_cast<std::int8_t>(ch_digit - '0')
            : static_cast<std::int8_t>(-0x80);
 }
 
-// -----------------------------------------------------------------------------
-// 2) Simple struct to hold hours/minutes/seconds as ints.
+/**
+ * @brief Simple struct to hold hours/minutes/seconds as ints.
+ * 
+ */
 struct HrMinSec {
-    int h, m, s;
+    std::int8_t h, m, s;
 };
 
-// -----------------------------------------------------------------------------
-// 3) Parse a literal "HH:MM:SS" into an HrMinSec.
-//    We assume `t` is exactly 8 characters + '\0'. E.g. "14:23:07".
+/**
+ * @brief Parse a literal "HH:MM:SS" into an HrMinSec.
+ * We assume `t` is exactly 8 characters + '\0'. E.g. "14:23:07" + '\0'
+ * 
+ * @param t 
+ * @return constexpr HrMinSec 
+ */
 constexpr HrMinSec parse_time(char const t[9]) {
     return HrMinSec {
-        // char_to_dec(t[0]) and t[1] each yield 0..9, so 10*something + something → 0..23
-        char_to_dec(t[0]) * 10 + char_to_dec(t[1]),
-        char_to_dec(t[3]) * 10 + char_to_dec(t[4]),
-        char_to_dec(t[6]) * 10 + char_to_dec(t[7])
+        static_cast<std::int8_t>(char_to_dec(t[0]) * 10 + char_to_dec(t[1])),
+        static_cast<std::int8_t>(char_to_dec(t[3]) * 10 + char_to_dec(t[4])),
+        static_cast<std::int8_t>(char_to_dec(t[6]) * 10 + char_to_dec(t[7]))
     };
 }
 
-// -----------------------------------------------------------------------------
-// 4) Build a 12‐hour “hh:mm:ss AM/PM” string (length = 11, plus '\0' = 12):
-//
-//    This is constexpr, so it all happens at compile‐time. We return a
-//    std::array<char, 12> containing, for example, "02:23:07 PM\0".
+/**
+ * @brief de-militarize time
+ * 
+ * @return constexpr std::array<char, 12> 
+ */
 constexpr std::array<char, 12> make_build_time_12() {
-    // __TIME__ is a compile‐time literal "HH:MM:SS"
-    constexpr char const_time[] = __TIME__; // e.g. "14:23:07"
+    //REM: __TIME__ is a compile‐time literal "HH:MM:SS"
+    constexpr char const * const const_time = __TIME__; //REM: e.g. "14:23:07" + "\0"
 
     constexpr HrMinSec t  = parse_time(const_time);
     constexpr bool    is_pm = (t.h >= 12);
@@ -53,43 +60,41 @@ constexpr std::array<char, 12> make_build_time_12() {
 
     std::array<char, 12> out = {};
 
-    // Fill in "hh"
+    //REM: Fill in "hh"
     out[0] = static_cast<char>('0' + (h12 / 10));
     out[1] = static_cast<char>('0' + (h12 % 10));
     out[2] = ':';
 
-    // Fill in "mm"
+    //REM: Fill in "mm"
     out[3] = static_cast<char>('0' + (t.m / 10));
     out[4] = static_cast<char>('0' + (t.m % 10));
     out[5] = ':';
 
-    // Fill in "ss"
+    //REM: Fill in "ss"
     out[6] = static_cast<char>('0' + (t.s / 10));
     out[7] = static_cast<char>('0' + (t.s % 10));
     out[8] = ' ';
 
-    // Fill in "AM" or "PM"
+    //REM: Fill in "AM" or "PM"
     out[9]  = (is_pm ? 'P' : 'A');
     out[10] = 'M';
 
-    // Null‐terminate
+    //REM: Null‐terminate
     out[11] = '\0';
 
     return out;
 }
 
-// -----------------------------------------------------------------------------
-// 5) Store the 12‐hour array in a named constexpr. This ensures it’s not a
-//    temporary, so its .data() pointer remains valid at runtime.
-inline constexpr std::array<char, 12> BUILD_TIME_12_ARRAY = make_build_time_12();
+inline constexpr std::array<char, 12> const BUILD_TIME_12_ARRAY = make_build_time_12();
 
-// Now expose a `const char*` to that array’s data:
-inline constexpr const char* BUILD_TIME_12_CSTR = BUILD_TIME_12_ARRAY.data();
+inline constexpr char const * const  BUILD_TIME_12_CSTR = BUILD_TIME_12_ARRAY.data();
 
-// -----------------------------------------------------------------------------
-// 6) Example macro that uses BUILD_TIME_12_CSTR. In your code, you can write
-//    printf("%s\n", BUILD_TIME_12_CSTR); or std::cout << BUILD_TIME_12_CSTR << "\n";
-#define __CPP_TIMESTAMP_12 BUILD_TIME_12_CSTR
+
+/**
+ * 
+ * printf("%s\n", BUILD_TIME_12_CSTR); or std::cout << BUILD_TIME_12_CSTR << "\n";
+ */
+#define __CPP_BUILD_TIMESTAMP_12 BUILD_TIME_12_CSTR
 
 //REM: Detect operating system:
 #if defined(_WIN32) || defined(_WIN64)
@@ -204,7 +209,7 @@ inline static char const * _format_ii = "[%-15s] [%-15s] [%-13s %12s] [%s:%d] %s
             _format_ii,                         \
             __CPP_PLATFORM,                     \
             __CPP_COMPILER,                     \
-            __CPP_BUILD_DATE, __CPP_TIMESTAMP_12,   \
+            __CPP_BUILD_DATE, __CPP_BUILD_TIMESTAMP_12,   \
             __CPP_FILE,                         \
             __CPP_LINE,                         \
             __CPP_FUNC_SIG                      \
@@ -218,7 +223,7 @@ inline static char const * _format_ii = "[%-15s] [%-15s] [%-13s %12s] [%s:%d] %s
         _format_i,                                   \
         __CPP_PLATFORM,                             \
         __CPP_COMPILER,                             \
-        __CPP_BUILD_DATE, __CPP_TIMESTAMP_12,                           \
+        __CPP_BUILD_DATE, __CPP_BUILD_TIMESTAMP_12,                           \
         tag, msg,                                   \
         __CPP_FILE, __CPP_LINE,                     \
         __CPP_FUNC_SIG                              \

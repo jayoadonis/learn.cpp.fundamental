@@ -10,7 +10,6 @@
 
 #include "learn/cpp/fundamental/log/demo_iii/macro_log.h"
 
-
 #include "learn/cpp/fundamental/value_semantic/test/copy_semantic/demo_ii/PersonTest.h"
 
 using namespace learn::cpp::fundamental::value_semantic;
