@@ -49,7 +49,7 @@ project.tasks.withType<CppCompile>().configureEach {
                 "-std=c++17"
             );
             is VisualCpp -> listOf(
-                "/std=c++17"
+                "/std:c++17"
             );
             else -> throw GradleException("Unsupported compiler: '$tc'.");
         }

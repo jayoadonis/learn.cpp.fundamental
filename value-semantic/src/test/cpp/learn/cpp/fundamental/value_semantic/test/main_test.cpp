@@ -37,6 +37,7 @@ int main(int arg_c, char** arg_v) {
 
     test::copy_semantic::demo_ii::PersonTest::run();
 
+
     // std::cout << "::: END (main)." << ((void*)main) << std::endl;
 
     std::printf("::: %-15s 0x%p\n", "END (main)", (void*)static_cast<int(*)(int,char**)>(main) );  

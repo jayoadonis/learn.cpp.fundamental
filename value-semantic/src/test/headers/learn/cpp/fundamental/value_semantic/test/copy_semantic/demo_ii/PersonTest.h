@@ -9,6 +9,7 @@
 #include <cstdio>
 
 #include <typeinfo>
+#include <iostream>
 
 namespace learn::cpp::fundamental
 ::value_semantic
@@ -21,6 +22,12 @@ namespace learn::cpp::fundamental
 
         public: static void run() {
 
+            std::printf( 
+                "::: BEGIN: run(V)V, %s, %p\n", 
+                typeid(static_cast<void(*)()>(&PersonTest::run)).name(), 
+                (void*)static_cast<void(*)()>(&PersonTest::run) 
+            );
+
             PersonTest personTest{};
 
             std::printf( "::: BEGIN: %s, %p\n", typeid(personTest).name(), static_cast<void*>(&personTest) );
@@ -29,11 +36,25 @@ namespace learn::cpp::fundamental
             personTest.testIII();
             std::printf( "::: END: %s, %p\n", typeid(personTest).name(), static_cast<void*>(&personTest) );
 
+            std::printf( 
+                "::: END: run(V)V, %s, %p\n", 
+                typeid(static_cast<void(*)()>(&PersonTest::run)).name(), 
+                (void*)static_cast<void(*)()>(&PersonTest::run) 
+            );
+
         }
 
         private: virtual void testI() const {
 
-            std::printf( ":: BEGIN: testI(V)V, %p\n", this ); 
+            void (PersonTest::* instMemFunc)(void) const = 
+                &PersonTest::testI; 
+
+            std::printf( 
+                ":: BEGIN: testI(V)V, %s, %p, %p\n", 
+                typeid(instMemFunc).name(), 
+                (void*)&instMemFunc,
+                this
+            ); 
 
             using namespace learn::cpp::fundamental::value_semantic;
             
@@ -49,7 +70,11 @@ namespace learn::cpp::fundamental
 
             std::cout << "3. '" << person.getFirstName() << "'" << std::endl;
 
-            std::printf( ":: END: testI(V)V, %p\n", this ); 
+            std::printf( 
+                ":: END: testI(V)V, %s, %p\n", 
+                typeid(static_cast<void(PersonTest::*)()const>(&PersonTest::testI)).name(), 
+                this
+            ); 
             
         }
 
@@ -106,3 +131,5 @@ namespace learn::cpp::fundamental
 }
 
 #endif
+
+
