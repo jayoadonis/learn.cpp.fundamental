@@ -132,6 +132,13 @@ project.tasks.withType<CppCompile>().configureEach {
         name.contains("test", ignoreCase = true) 
     ) {
 
+        compilerArgs.addAll( toolChain.map { tc ->
+            when( tc ) {
+                // is Gcc, is Clang -> listOf( "-D__NO_DEMO_MACRO_LOG" );
+                // is VisualCpp -> listOf( "/D__NO_DEMO_MACRO_LOG" );
+                else -> listOf( "" )
+            }
+        });
     }
     else {
         
