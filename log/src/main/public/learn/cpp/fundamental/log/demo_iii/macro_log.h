@@ -179,7 +179,6 @@ inline constexpr char const * const  BUILD_TIME_12_CSTR = BUILD_TIME_12_ARRAY.da
 //REM: Timestamp
 #define __CPP_BUILDSTAMP   __CPP_BUILD_DATE " " __CPP_BUILD_TIME
 
-// If you want to include the host OS or compiler version, you can do things like:
 #if defined(_MSC_VER)
   #define __CPP_COMPILER  "MSVC " __CPP_STRINGIFY(_MSC_VER)
 #elif defined(__clang__)
@@ -188,6 +187,23 @@ inline constexpr char const * const  BUILD_TIME_12_CSTR = BUILD_TIME_12_ARRAY.da
   #define __CPP_COMPILER  "GCC " __CPP_STRINGIFY(__GNUC__) "." __CPP_STRINGIFY(__GNUC_MINOR__)
 #else
   #define __CPP_COMPILER  "UnknownCompiler"
+#endif
+
+#if defined(_MSVC_LANG)
+  //REM: Only works with MSVC 15.3 (2017) and above
+  #define __CPP_STD_LANG_VER _MSVC_LANG
+#elif defined(_MSC_VER)
+  //REM: Prior MSVC (2017)
+  #if _MSC_VER >= 1910
+    #define __CPP_STD_LANG_VER 201402L /*REM: c++14*/
+  #elif _MSC_VER >= 1900
+    #define __CPP_STD_LANG_VER 201103L /*REM: c++11*/     
+  #else
+    #define __CPP_STD_LANG_VER 199711L /*REM: c++98*/  
+  #endif  
+#else
+  //REM: Gcc and Clang
+  #define __CPP_STD_LANG_VER __cplusplus
 #endif
 
 #ifndef __NO_DEMO_MACRO_LOG
@@ -200,8 +216,9 @@ inline constexpr char const * const  BUILD_TIME_12_CSTR = BUILD_TIME_12_ARRAY.da
       __CPP_FUNC_SIG
 
   inline thread_local static char _cpp_loc_buf[1024];
-  inline static char const * _format_i = "[%-15s] [%-15s] [%-13s %12s]: %s, %s; [%s:%d] %s\n";
-  inline static char const * _format_ii = "[%-15s] [%-15s] [%-13s %12s] [%s:%d] %s";
+  inline static char const * _format_i = "[%-15s] [%-15s %010lu] [%-13s %12s]: %s, %s; [%s:%d] %s\n";
+  inline static char const * _format_ii = "[%-15s] [%-15s %010lu] [%-13s %12s] [%s:%d] %s";
+
 
   #define __CPP_LOCATION_FULL_II \
       (                                           \
@@ -210,6 +227,7 @@ inline constexpr char const * const  BUILD_TIME_12_CSTR = BUILD_TIME_12_ARRAY.da
               _format_ii,                         \
               __CPP_PLATFORM,                     \
               __CPP_COMPILER,                     \
+              __CPP_STD_LANG_VER,                        \
               __CPP_BUILD_DATE, __CPP_BUILD_TIMESTAMP_12,   \
               __CPP_FILE,                         \
               __CPP_LINE,                         \
@@ -224,6 +242,7 @@ inline constexpr char const * const  BUILD_TIME_12_CSTR = BUILD_TIME_12_ARRAY.da
           _format_i,                                   \
           __CPP_PLATFORM,                             \
           __CPP_COMPILER,                             \
+          __CPP_STD_LANG_VER,                         \
           __CPP_BUILD_DATE, __CPP_BUILD_TIMESTAMP_12,                           \
           tag, msg,                                   \
           __CPP_FILE, __CPP_LINE,                     \

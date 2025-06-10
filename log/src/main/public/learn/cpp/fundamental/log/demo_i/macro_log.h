@@ -25,4 +25,20 @@
     )
 
 
+#include "learn/cpp/fundamental/log/constant.h"
+
+__BEGIN_LEARN_CPP_FUNDAMENTAL_LOG_DEMO_I 
+
+    double func_one( double x ) {
+
+        return static_cast<double>(x * 2);
+    }
+
+    int func_two( double x ) {
+
+        return static_cast<int>(x) * 2;
+    }
+    
+__END_LEARN_CPP_FUNDAMENTAL_LOG_DEMO_I
+
 #endif
